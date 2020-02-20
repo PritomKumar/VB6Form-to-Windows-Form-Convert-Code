@@ -40,7 +40,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmStammPatientDocCopy";
+            var formName = "frmStammVorlage";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -412,9 +412,9 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"KeyCode == (int)VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyCode == Keys.Escape");
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);"))
                     {
-                        //line = line.Replace( @"", @"");
+                        line = line.Replace(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);", @"DefInstance.ShowDialog();");
                     }
                     if (line.Contains(@""))
                     {
