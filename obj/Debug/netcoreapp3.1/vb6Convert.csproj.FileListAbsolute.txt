@@ -9,3 +9,14 @@ C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert
 C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.pdb
 C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.dll
 C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.pdb
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.exe
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.deps.json
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.runtimeconfig.json
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.runtimeconfig.dev.json
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.dll
+F:\Personal\C# Projects\VB6Form To Windows Form\bin\Debug\netcoreapp3.1\vb6Convert.pdb
+F:\Personal\C# Projects\VB6Form To Windows Form\obj\Debug\netcoreapp3.1\vb6Convert.csprojAssemblyReference.cache
+F:\Personal\C# Projects\VB6Form To Windows Form\obj\Debug\netcoreapp3.1\vb6Convert.AssemblyInfoInputs.cache
+F:\Personal\C# Projects\VB6Form To Windows Form\obj\Debug\netcoreapp3.1\vb6Convert.AssemblyInfo.cs
+F:\Personal\C# Projects\VB6Form To Windows Form\obj\Debug\netcoreapp3.1\vb6Convert.dll
+F:\Personal\C# Projects\VB6Form To Windows Form\obj\Debug\netcoreapp3.1\vb6Convert.pdb

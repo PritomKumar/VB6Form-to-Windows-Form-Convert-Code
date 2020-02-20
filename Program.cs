@@ -390,9 +390,9 @@ namespace vb6Convert
                         previousLine = @"internal partial class ";
                         //line = line.Replace( @"", @"");
                     }
-                    if (previousLine.Equals("internal partial class ") && line.Contains("{"))
+                    if (previousLine.Equals("internal partial class ") && line.Contains("{") && !line.Contains(@"//"))
                     {
-                        line = line + @"
+                        line = line + @"//
 		#region Developer Work
 		// Search and Check TODO
 		//In Designer.cs
@@ -549,6 +549,9 @@ namespace vb6Convert
             csContent = Regex.Replace(csContent, @".ReBind", @".Rebind");
             csContent = Regex.Replace(csContent, @".AlternatingRowStyle", @".AlternatingRows");
             csContent = Regex.Replace(csContent, @"this.hWnd", @"(int)this.Handle");
+            csContent = Regex.Replace(csContent, @".SelStart", @".SelectionStart");
+            csContent = Regex.Replace(csContent, @".SelLength", @".SelectionLength");
+            csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
