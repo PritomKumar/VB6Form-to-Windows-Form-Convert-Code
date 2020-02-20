@@ -408,9 +408,9 @@ namespace vb6Convert
                          previousLine = string.Empty;
                         //line = line.Replace( @"", @"");
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@"KeyCode == (int)VBRUN.KeyCodeConstants.vbKeyEscape"))
                     {
-                        //line = line.Replace( @"", @"");
+                        line = line.Replace(@"KeyCode == (int)VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyCode == Keys.Escape");
                     }
                     if (line.Contains(@""))
                     {

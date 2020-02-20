@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pritom.kumar\\source\\repos\\vb6Convert\\vb6Convert.csproj",
+      "projectUniqueName": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
       "projectName": "vb6Convert",
-      "projectPath": "C:\\Users\\pritom.kumar\\source\\repos\\vb6Convert\\vb6Convert.csproj",
+      "projectPath": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
       "packagesPath": "C:\\Users\\pritom.kumar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pritom.kumar\\source\\repos\\vb6Convert\\obj\\",
+      "outputPath": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pritom.kumar\\AppData\\Roaming\\NuGet\\NuGet.Config",
