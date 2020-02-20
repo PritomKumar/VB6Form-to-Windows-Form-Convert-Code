@@ -16,6 +16,7 @@ namespace vb6Convert
         public static List<string> queryUnloadEventHandlerList = new List<string>();
         public static List<string> keyEventHandlerList = new List<string>();
         public static List<string> formClosedEventHandlerList = new List<string>();
+        public static List<string> allTODO_ProblemList = new List<string>();
 
         static void Main(String[] args)
         {
@@ -318,6 +319,8 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @".DblClick ", @".DoubleClick ");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6CheckedListBox", @"ListBox");
             designerContent = Regex.Replace(designerContent, @".Multiline = true;", @".MultiLine = DefaultBoolean.True;");
+            designerContent = Regex.Replace(designerContent, @"SoftPlus.MigratedControls.SP_ComboText", @"ComboBox");
+            designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
@@ -415,6 +418,22 @@ namespace vb6Convert
                     if (line.Contains(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);"))
                     {
                         line = line.Replace(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);", @"DefInstance.ShowDialog();");
+                    }
+                    if (line.Contains(@".Clear();") && !line.Contains(@".Items.Clear();"))
+                    {
+                        line = line.Replace(@".Clear();", @".Items.Clear();");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
                     }
                     if (line.Contains(@""))
                     {
