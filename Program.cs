@@ -430,7 +430,16 @@ namespace vb6Convert
                     {
                         line = line.Replace(@".Clear();", @".Items.Clear();");
                     }
-                    if (line.Contains(@".ZOrder"))
+                    if (line.Contains(@".ZOrder") 
+                        || line.Contains(".AddItem(")
+                        || line.Contains("mod_Language.SetCurrentLanguage(this);")
+                        || line.Contains("")
+                        || line.Contains("")
+                        || line.Contains("")
+                        || line.Contains("")
+                       
+
+                    )
                     {
                         allTODO_ProblemList.Add(line);
                     }
