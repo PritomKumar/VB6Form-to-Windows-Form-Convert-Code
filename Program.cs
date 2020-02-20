@@ -426,18 +426,13 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);", @"DefInstance.ShowDialog();");
                     }
-                    if (line.Contains(@".Clear();") && !line.Contains(@".Items.Clear();"))
+                    if (line.Contains(@".Clear();") && !line.Contains(@".Items.Clear();") && !line.Contains(@".Err.Clear();"))
                     {
                         line = line.Replace(@".Clear();", @".Items.Clear();");
                     }
-                    if (line.Contains(@".ZOrder") 
-                        || line.Contains(".AddItem(")
-                        || line.Contains("mod_Language.SetCurrentLanguage(this);")
-                        || line.Contains("")
-                        || line.Contains("")
-                        || line.Contains("")
-                        || line.Contains("")
-                       
+                    if ((line.Contains(@".ZOrder") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains("mod_Language.SetCurrentLanguage(this);") && !line.Contains(@"//"))
 
                     )
                     {
