@@ -41,7 +41,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmStammVorlage";
+            var formName = "frmStammZifferList";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -432,15 +432,21 @@ namespace vb6Convert
                     }
                     if ((line.Contains(@".ZOrder") && !line.Contains(@"//"))
                         || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".Array = mxaListe;") && !line.Contains(@"//"))
+                        || (line.Contains("].HeadFont.") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains("mod_Language.SetCurrentLanguage(this);") && !line.Contains(@"//"))
 
                     )
                     {
                         allTODO_ProblemList.Add(line);
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@".FetchRowStyle"))
                     {
-                        //line = line.Replace( @"", @"");
+                        line = line.Replace(@".FetchRowStyle", @".FetchRowStyles");
                     }
                     if (line.Contains(@""))
                     {
