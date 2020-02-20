@@ -412,6 +412,12 @@ namespace vb6Convert
                          previousLine = string.Empty;
                         //line = line.Replace( @"", @"");
                     }
+
+                    if (line.Contains(@"{"))
+                    {
+                        previousLine = String.Empty;
+                        //line = line.Replace( @"", @"");
+                    }
                     if (line.Contains(@"KeyCode == (int)VBRUN.KeyCodeConstants.vbKeyEscape"))
                     {
                         line = line.Replace(@"KeyCode == (int)VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyCode == Keys.Escape");
@@ -612,9 +618,16 @@ namespace vb6Convert
                     }
                     
 
-                    if (line.Contains(@".ZOrder"))
+                    if (line.Contains(@"//In code.cs"))
                     {
-                        allTODO_ProblemList.Add(line);
+                        var todoComment = String.Empty;
+                        foreach (var TODO in allTODO_ProblemList)
+                        {
+                            todoComment = todoComment + "\n" + @"//" + TODO.TrimStart();
+                        }
+
+                        //Console.WriteLine("TODOcommect = " + todoComment);
+                        line = line + todoComment;
                     }
                     if (line.Contains(@""))
                     {
@@ -633,15 +646,23 @@ namespace vb6Convert
                         //line = line.Replace( @"", @"");
                     }
 
-
+                    foreach (var todo in allTODO_ProblemList)
+                    {
+                        if (line.Equals(todo))
+                        {
+                            line = @"//TODO" + "\n" + @"//" + line.TrimStart();
+                        }
+                    }
+                    
                    
-
-
                     csContent = csContent + line + "\n";
                 }
                 //csContent = reader.ReadToEnd();
                 reader.Close();
             }
+
+            allTODO_ProblemList.Clear();
+
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
