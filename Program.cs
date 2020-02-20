@@ -51,6 +51,7 @@ namespace vb6Convert
 
             ReplaceInDesignerFile(desingerFilePath);
             ReplaceInCsFile(csFilePath);
+            ReplaceInCsFileTODOWorks(csFilePath);
 
             //FreeAgent freeAgent = new FreeAgent();
             //freeAgent.Work();
@@ -423,9 +424,9 @@ namespace vb6Convert
                     {
                         line = line.Replace(@".Clear();", @".Items.Clear();");
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@".ZOrder"))
                     {
-                        //line = line.Replace( @"", @"");
+                        allTODO_ProblemList.Add(line);
                     }
                     if (line.Contains(@""))
                     {
@@ -589,6 +590,79 @@ namespace vb6Convert
                 writer.Close();
             }
         }
+
+        public static void ReplaceInCsFileTODOWorks(string filePath)
+        {
+
+            csContent = string.Empty;
+            string line = string.Empty;
+            string previousLine = String.Empty;
+
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if ((
+                        line.Contains(@""))
+                        && !line.Contains(@"//"))
+                    {
+                        //line = line.TrimStart();
+                        //line = @"//" + line;
+
+                    }
+                    
+
+                    if (line.Contains(@".ZOrder"))
+                    {
+                        allTODO_ProblemList.Add(line);
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+
+
+                   
+
+
+                    csContent = csContent + line + "\n";
+                }
+                //csContent = reader.ReadToEnd();
+                reader.Close();
+            }
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+
+            using (StringReader reader = new StringReader(csContent))
+            {
+
+                reader.Close();
+            }
+
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.Write(csContent);
+                writer.Close();
+            }
+        }
+
+
     }
 }
 
