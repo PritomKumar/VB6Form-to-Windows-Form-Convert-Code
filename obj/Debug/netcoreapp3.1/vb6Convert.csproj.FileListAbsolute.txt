@@ -1,0 +1,11 @@
+C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.csprojAssemblyReference.cache
+C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.AssemblyInfoInputs.cache
+C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.AssemblyInfo.cs
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.exe
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.deps.json
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.runtimeconfig.json
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.runtimeconfig.dev.json
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.dll
+C:\Users\pritom.kumar\source\repos\vb6Convert\bin\Debug\netcoreapp3.1\vb6Convert.pdb
+C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.dll
+C:\Users\pritom.kumar\source\repos\vb6Convert\obj\Debug\netcoreapp3.1\vb6Convert.pdb

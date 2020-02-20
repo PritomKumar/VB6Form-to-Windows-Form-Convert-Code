@@ -1,0 +1,572 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using System.IO;
+using System.Text.RegularExpressions;
+
+namespace vb6Convert
+{
+    class Program
+    {
+
+        public static string designerContent = "";
+        public static string csContent = "";
+        public static List<string> eventHandlerList = new List<string>();
+        public static List<string> keyPressEventHandlerList = new List<string>();
+        public static List<string> queryUnloadEventHandlerList = new List<string>();
+        public static List<string> keyEventHandlerList = new List<string>();
+        public static List<string> formClosedEventHandlerList = new List<string>();
+
+        static void Main(String[] args)
+        {
+
+            //var basePath = "F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\";
+            var basePath = "F:\\Termin Plus Project\\TerminPlus\\TerminPlus.Net\\TerminPlus\\";
+            var desingnerExtention = ".Designer.cs";
+            var csExtension = ".cs";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            var formName = "frmStammPatientDocCopy";
+
+            var desingerFilePath = basePath + formName + desingnerExtention;
+            var csFilePath = basePath + formName + csExtension; ;
+
+            //ReplaceInFile("F:\\C# Tutorial Practice\\TutorialApplication\\Program.cs");    
+            //ReplaceInFile("F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\frmRgEinzahlungBuchen.Designer.cs");
+
+            ReplaceInDesignerFile(desingerFilePath);
+            ReplaceInCsFile(csFilePath);
+
+            //FreeAgent freeAgent = new FreeAgent();
+            //freeAgent.Work();
+
+        }
+
+        public static void ReplaceInDesignerFile(string filePath)
+        {
+
+            designerContent = string.Empty;
+            string line = string.Empty;
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if ((line.Contains(@".BackStyle = CodeArchitects.VB6Library.VB6BackStyleConstants.Transparent;")
+                        || line.Contains(@".Style = CodeArchitects.VB6Library.VBRUN.ButtonConstants.vbButtonGraphical;")
+                        || line.Contains(@".Value2 = ")
+                        || line.Contains(@".OcxState = ")
+                        || line.Contains(@".OLEDropMode = ")
+                        || line.Contains(@".ParentForm = this;")
+                        || line.Contains(@".Name6 = ")
+                        || line.Contains(@".Name = ")
+                        || line.Contains(@".Value2 = ")
+                        || line.Contains(@".HelpContextID = "))
+                        && !line.Contains(@"//"))
+                    {
+                        line = line.TrimStart();
+                        line = @"//" + line;
+
+                    }
+                    else if (line.Contains(@"InitializeComponents();"))
+                    {
+
+                        line = "InitializeComponent();";
+
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.VB6ControlArrayCS"))
+                    {
+                        line = line.Replace("(", "{");
+                        line = line.Replace(")", "}");
+
+                    }
+
+                    //if (line.Contains(@"[]") && line.Contains(@"("))
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
+                    //if (line.Contains(@"[]") && line.Contains(@")"))
+                    //{
+                    //    line = Regex.Replace(line, @")", @"}");          
+                    //}
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6EventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            eventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6KeyPressEventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            keyPressEventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            queryUnloadEventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6KeyEventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            keyEventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6ByrefShortEventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            formClosedEventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    designerContent = designerContent + line + "\n";
+                }
+                //designerContent = reader.ReadToEnd();
+                reader.Close();
+            }
+
+            //foreach (var events in eventHandlerList)
+            //{
+            //    Console.WriteLine(events);  
+            //}
+            designerContent = Regex.Replace(designerContent, @".Appearance = CodeArchitects.VB6Library.VB6AppearanceConstants.Flat;",
+                ".FlatStyle = FlatStyle.Flat;");
+            designerContent = Regex.Replace(designerContent, @"QueryUnload += new CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler",
+                @"FormClosing += new FormClosingEventHandler");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler", @"FormClosingEventHandler");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Form", "Form");
+            designerContent = Regex.Replace(designerContent, @".Change += new CodeArchitects.VB6Library.Events.VB6EventHandler",
+                @".TextChanged += new System.EventHandler");
+            designerContent = Regex.Replace(designerContent, ".Caption", ".Text");
+            designerContent = Regex.Replace(designerContent, @".BorderStyle = CodeArchitects.VB6Library.VBRUN.FormBorderStyleConstants.vbFixedDouble;",
+                @".FormBorderStyle = FormBorderStyle.Fixed3D;");
+            designerContent = Regex.Replace(designerContent, ".MaxButton", ".MaximizeBox");
+            designerContent = Regex.Replace(designerContent, ".MinButton", ".MinimizeBox");
+            designerContent = Regex.Replace(designerContent, ".StartUpPosition = CodeArchitects.VB6Library.VBRUN.StartUpPositionConstants.vbStartUpManual;",
+                ".StartPosition = FormStartPosition.Manual;");
+            designerContent = Regex.Replace(designerContent, ".Unload += new CodeArchitects.VB6Library.Events.VB6ByrefShortEventHandler",
+                ".FormClosed += new FormClosedEventHandler    ");
+            designerContent = Regex.Replace(designerContent, "Activate += new CodeArchitects.VB6Library.Events.VB6EventHandler",
+                "Activated += new System.EventHandler");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.Events.VB6EventHandler", "System.EventHandler");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6CommandButton", "Button");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6PictureBox", "PictureBox");
+            designerContent = Regex.Replace(designerContent, @".AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;",
+                @".SizeMode = PictureBoxSizeMode.AutoSize;");
+            designerContent = Regex.Replace(designerContent, ".AutoRedraw = true;", ".Refresh();");
+            designerContent = Regex.Replace(designerContent, "SoftPlus.MigratedControls.SP_ComboDrop", "ComboBox");
+            designerContent = Regex.Replace(designerContent, ".ListIndex", ".SelectedIndex");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Label", "Label");
+            designerContent = Regex.Replace(designerContent, @".Alignment = CodeArchitects.VB6Library.VBRUN.AlignmentConstants.vbRightJustify;",
+                @".Anchor = AnchorStyles.Right;");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Frame", "GroupBox");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6CheckBox", "CheckBox");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6BorderStyleConstants", "BorderStyle");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6TextBox", "TextBox");
+            designerContent = Regex.Replace(designerContent, @".ScrollBars = CodeArchitects.VB6Library.VBRUN.ScrollBarConstants.vbVertical;",
+                @".ScrollBars = ScrollBars.Vertical;");
+            designerContent = Regex.Replace(designerContent, "SP_ComboDrop", "ComboBox");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.TDBGrid", "C1.Win.C1TrueDBGrid.C1TrueDBGrid");
+            designerContent = Regex.Replace(designerContent, ".ReBind();", ".Rebind();");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6ImageList", "ImageList");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6DTPicker", "DateTimePicker");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6ListView", "ListView");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Timer", "Timer");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6OptionButton", "RadioButton");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6StatusBar", "StatusBar");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6CommonDialog", "OpenFileDialog");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6WebBrowser", "WebBrowser");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6MainMenu", "MenuStrip");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Menu", "ToolStripMenuItem");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6FrameNoBorder", "GroupBox");
+            designerContent = Regex.Replace(designerContent, "SoftPlus.MigratedControls.VB6PVDate2", "DateTimePicker");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6ControlArrayCS<", "");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.Events.VB6KeyEventHandler", "KeyEventHandler");
+            designerContent = Regex.Replace(designerContent, "SoftPlus.MigratedControls.VB6TDBGrid", "C1.Win.C1TrueDBGrid.C1TrueDBGrid");
+            designerContent = Regex.Replace(designerContent, @".Alignment = CodeArchitects.VB6Library.VBRUN.AlignmentConstants.vbCenter;",
+                @".Anchor = AnchorStyles.None;");
+            designerContent = Regex.Replace(designerContent, "VB6Project.EnsureVB6Library", "//VB6Project.EnsureVB6Library");
+            designerContent = Regex.Replace(designerContent, "VB6PVDate2", "DateTimePicker");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.Events.VB6KeyPressEventHandler", "KeyPressEventHandler");
+            designerContent = Regex.Replace(designerContent, "VB6TDBGrid", "C1.Win.C1TrueDBGrid.C1TrueDBGrid");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.Events.VB6ByrefShortEventHandler",
+                @"FormClosedEventHandler");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6ProgressBar", "ProgressBar");
+            designerContent = Regex.Replace(designerContent, @"InitializeComponents();", @"InitializeComponent();");
+            //designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VBRUN.ButtonConstants.vbButtonGraphical;", "//.*$");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.MSComCtl2.FormatConstant.dtpShortDate;", "DateTimePickerFormat.Short;");
+            designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6TreeView", "TreeView");
+            designerContent = Regex.Replace(designerContent, @".StartUpPosition = CodeArchitects.VB6Library.VBRUN.StartUpPositionConstants.vbStartUpOwner;",
+                @".StartPosition = FormStartPosition.CenterParent;");
+            designerContent = Regex.Replace(designerContent, @"SP_ComboDrop", @"ComboBox");
+            designerContent = Regex.Replace(designerContent, @">", @"[]");
+            designerContent = Regex.Replace(designerContent, @".Align = CodeArchitects.VB6Library.VBRUN.AlignConstants.vbAlignNone;",
+                @".Anchor = AnchorStyles.None;");
+            designerContent = Regex.Replace(designerContent, @".BorderStyle = CodeArchitects.VB6Library.VBRUN.FormBorderStyleConstants.vbFixedSingle;",
+                @".FormBorderStyle = FormBorderStyle.FixedSingle;");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.MSComCtl2.FormatConstant.dtpLongDate;",
+                @"DateTimePickerFormat.Long;");
+            designerContent = Regex.Replace(designerContent, @".StartUpPosition = CodeArchitects.VB6Library.VBRUN.StartUpPositionConstants.vbStartUpWindowsDefault;",
+                @".StartPosition = FormStartPosition.WindowsDefaultLocation;");
+            designerContent = Regex.Replace(designerContent, @"SoftPlus.MigratedControls.VB6PVTime", @"DateTimePicker");
+            designerContent = Regex.Replace(designerContent, @".Change ", @".TextChanged ");
+            designerContent = Regex.Replace(designerContent, @"QueryUnload ", @"FormClosing ");
+            designerContent = Regex.Replace(designerContent, @"Activate ", @"Activated ");
+            designerContent = Regex.Replace(designerContent, @"Unload ", @"FormClosed    ");
+            designerContent = Regex.Replace(designerContent, @"StartUpPosition = CodeArchitects.VB6Library.VBRUN.StartUpPositionConstants.vbStartUpScreen;",
+                @"StartPosition = FormStartPosition.CenterScreen;");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6SSTab", @"DevExpress.XtraTab.XtraTabControl");
+            designerContent = Regex.Replace(designerContent, @"System.Windows.Forms.TabPage", @"DevExpress.XtraTab.XtraTabPage");
+            designerContent = Regex.Replace(designerContent, @".ShowToolTips = true;", @".ShowToolTips = DevExpress.Utils.DefaultBoolean.True;");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.Events.VB6MouseEventHandler", @"MouseEventHandler");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6ListBox", @"ListBox");
+            designerContent = Regex.Replace(designerContent, @".DblClick ", @".DoubleClick ");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6CheckedListBox", @"ListBox");
+            designerContent = Regex.Replace(designerContent, @".Multiline = true;", @".MultiLine = DefaultBoolean.True;");
+            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"", @"");
+
+            using (StringReader reader = new StringReader(designerContent))
+            {
+                reader.Close();
+            }
+
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.Write(designerContent);
+                writer.Close();
+            }
+        }
+
+        public static void ReplaceInCsFile(string filePath)
+        {
+
+            csContent = string.Empty;
+            string line = string.Empty;
+            string previousLine = String.Empty;
+
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if ((
+                        line.Contains(@""))
+                        && !line.Contains(@"//"))
+                    {
+                        //line = line.TrimStart();
+                        //line = @"//" + line;
+
+                    }
+                    if (line.Contains(".Default = true;"))
+                    {
+                        string trimmedLine = line.TrimStart();
+                        string modifiedLine = @"this.AcceptButton = " +
+                                              trimmedLine.Substring(0, trimmedLine.LastIndexOf(".Default")) + ";";
+                        line = modifiedLine;
+                    }
+
+                    if (line.Contains(@"RefetchCol"))
+                    {
+                        line = line.Replace("(", "[");
+                        line = line.Replace(")", "]");
+                        string oldLine = line.Substring(0, line.LastIndexOf(".")) + ".Columns" +
+                                         line.Substring(line.LastIndexOf("["),
+                                             line.LastIndexOf("]") - line.LastIndexOf("[") + 1)
+                                         + ".Refetch();";
+                        //Console.WriteLine("Refetch = " + oldLine );
+                        line = oldLine;
+                    }
+
+                    if (line.Contains(@"UnloadMode == (int) VBRUN.QueryUnloadConstants.vbFormControlMenu") && line.Contains(@"("))
+                    {
+                        line = Regex.Replace(line, @"UnloadMode == (int) VBRUN.QueryUnloadConstants.vbFormControlMenu",
+                            @"e.CloseReason == (int) VBRUN.QueryUnloadConstants.vbFormControlMenu");
+                    }
+
+                    if (line.Contains(@"Cancel = 1;"))
+                    {
+                        line = line.Replace(@"Cancel = 1;", @"e.Cancel = true;");
+                    }
+                    if (line.Contains(@"internal partial class "))
+                    {
+                        previousLine = @"internal partial class ";
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (previousLine.Equals("internal partial class ") && line.Contains("{"))
+                    {
+                        line = line + @"
+		#region Developer Work
+		// Search and Check TODO
+		//In Designer.cs
+
+
+		//In code.cs
+
+				
+		#endregion
+
+"
+                            ;
+                         previousLine = string.Empty;
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+
+
+                    //if (line.Contains(@"[]") && line.Contains(@"("))
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
+
+                    //if (line.Contains(@"[]") && line.Contains(@")"))
+                    //{
+                    //    line = Regex.Replace(line, @")", @"}");          
+                    //}
+
+                    foreach (var eventString in eventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , EventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , EventArgs e )";
+                            line = modifiedLine;
+                            //Console.WriteLine("Modified Line = " + modifiedLine);
+                            break;
+
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
+                    foreach (var eventString in keyPressEventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , KeyPressEventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , KeyPressEventArgs e )";
+                            line = modifiedLine;
+                            break;
+                            // Console.WriteLine("Modified Line = " + modifiedLine);
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
+                    foreach (var eventString in queryUnloadEventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , FormClosingEventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , FormClosingEventArgs e )";
+                            line = modifiedLine;
+                            //Console.WriteLine("Modified Line = " + modifiedLine);
+                            break;
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
+                    foreach (var eventString in keyEventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , KeyEventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , KeyEventArgs e )";
+                            line = modifiedLine;
+                            //Console.WriteLine("Modified Line = " + modifiedLine);
+                            break;
+
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
+                    foreach (var eventString in formClosedEventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , FormClosedEventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , FormClosedEventArgs e )";
+                            line = modifiedLine;
+                            //Console.WriteLine("Modified Line = " + modifiedLine);
+                            break;
+
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
+                    if (line.Contains(@"") && line.Contains(@"("))
+                    {
+                        //line = Regex.Replace(line, @"(", @"{");
+                    }
+
+                    if (line.Contains(@"DefInstance.Show(1);"))
+                    {
+                        line = line.Replace(@"DefInstance.Show(1);", @"DefInstance.ShowDialog();");
+
+                    }
+
+                    if (line.Contains(@"KeyAscii == (int) VBRUN.KeyCodeConstants.vbKeyEscape"))
+                    {
+                        line = line.Replace(@"KeyAscii == (int) VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyChar == (char)Keys.Escape");
+                        //Console.WriteLine("LALALALA");
+                    }
+                    if (line.Contains(@"KeyAscii == (int)VBRUN.KeyCodeConstants.vbKeyEscape"))
+                    {
+                        line = line.Replace(@"KeyAscii == (int)VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyChar == (char)Keys.Escape");
+                        //Console.WriteLine("LALALALA");
+                    }
+
+
+                    csContent = csContent + line + "\n";
+                }
+                //csContent = reader.ReadToEnd();
+                reader.Close();
+            }
+
+            csContent = Regex.Replace(csContent, @".Caption", @".Text");
+            csContent = Regex.Replace(csContent, "DefInstance.Show(1);", @"DefInstance.ShowDialog();");
+            csContent = Regex.Replace(csContent, @".SetFocus", @".Focus");
+            csContent = Regex.Replace(csContent, @"Value == VBRUN.CheckBoxConstants.vbUnchecked", @"Checked == false");
+            csContent = Regex.Replace(csContent, @"Value == VBRUN.CheckBoxConstants.vbChecked", @"Checked == true");
+            csContent = Regex.Replace(csContent, @"Controls6", @"Controls");
+            csContent = Regex.Replace(csContent, @"Value = VBRUN.CheckBoxConstants.vbUnchecked", @"Checked = false");
+            csContent = Regex.Replace(csContent, @"Value = VBRUN.CheckBoxConstants.vbChecked", @"Checked = true");
+            csContent = Regex.Replace(csContent, @".ReBind", @".Rebind");
+            csContent = Regex.Replace(csContent, @".AlternatingRowStyle", @".AlternatingRows");
+            csContent = Regex.Replace(csContent, @"this.hWnd", @"(int)this.Handle");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+
+            using (StringReader reader = new StringReader(csContent))
+            {
+
+                reader.Close();
+            }
+
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.Write(csContent);
+                writer.Close();
+            }
+        }
+    }
+}
+
