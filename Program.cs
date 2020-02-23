@@ -99,15 +99,15 @@ namespace vb6Convert
                         line = line.Replace(")", "}");
                     }
 
-                    
+
                     //if (line.Contains(@"[]") && line.Contains(@"("))
-                        //{
-                        //    line = Regex.Replace(line, @"(", @"{");                      
-                        //}
-                        //if (line.Contains(@"[]") && line.Contains(@")"))
-                        //{
-                        //    line = Regex.Replace(line, @")", @"}");          
-                        //}
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
+                    //if (line.Contains(@"[]") && line.Contains(@")"))
+                    //{
+                    //    line = Regex.Replace(line, @")", @"}");          
+                    //}
 
                     if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6EventHandler"))
                     {
@@ -241,7 +241,7 @@ namespace vb6Convert
                         }
                     }
 
-                 
+
                     designerContent = designerContent + line + "\n";
                 }
                 //designerContent = reader.ReadToEnd();
@@ -441,7 +441,7 @@ namespace vb6Convert
 
 "
                             ;
-                         previousLine = string.Empty;
+                        previousLine = string.Empty;
                         //line = line.Replace( @"", @"");
                     }
 
@@ -458,7 +458,7 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);", @"DefInstance.ShowDialog();");
                     }
-                    if (line.Contains(@".Clear();") 
+                    if (line.Contains(@".Clear();")
                         && !line.Contains(@".Items.Clear();")
                         && !line.Contains(@".Nodes.Clear();")
                         && !line.Contains(@".Err.Clear();"))
@@ -493,151 +493,7 @@ namespace vb6Convert
                         allTODO_ProblemList.Add(line);
                     }
 
-                    foreach (var sublist in allVariableNameAndType)
-                    {
-                        if (sublist[0].Equals("PictureBox"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("DrawMode");
-                            deprecatedAttributeList.Add("DrawStyle");
-                            deprecatedAttributeList.Add("Line");
 
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var todoChange = sublist[1] + "." + deprecatedAttribute;
-                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
-                                    
-                                )
-                                {
-                                    allTODO_ProblemList.Add(line);
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("ComboBox"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Value2");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var todoChange = sublist[1] + "." + deprecatedAttribute;
-                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
-                                    
-                                    )
-                                {
-                                    allTODO_ProblemList.Add(line);
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("C1.Win.C1TrueDBGrid.C1TrueDBGrid"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Array");
-                            deprecatedAttributeList.Add("FetchStyle");
-                            deprecatedAttributeList.Add("Locked");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var todoChange = sublist[1] + "." + deprecatedAttribute;
-                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
-
-                                )
-                                {
-                                    allTODO_ProblemList.Add(line);
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("ComboBox"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Value");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                var changedValue = sublist[1] + "." + "SelectedValue";
-                                var cautionValue = sublist[1] + "." + "Value2";
-                                if ((line.Contains(changeAttribute) 
-                                     && !line.Contains(@"//") 
-                                     && !line.Contains(changedValue)
-                                     && !line.Contains(cautionValue)
-                                
-                                    ))
-                                {
-                                    line = line.Replace(changeAttribute, changedValue);
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("CheckBox"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Value");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                if (deprecatedAttribute.Equals("Value"))
-                                {
-                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                    var changedValue = sublist[1] + "." + "Checked";
-                                    var cautionValue = sublist[1] + "." + "Value2";
-                                    if ((line.Contains(changeAttribute)
-                                         && !line.Contains(@"//")
-                                         && !line.Contains(changedValue)
-                                         && !line.Contains(cautionValue)
-
-                                        ))
-                                    {
-                                        line = line.Replace(changeAttribute, changedValue);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("ProgressBar"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Max");
-                            deprecatedAttributeList.Add("Min");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                if (deprecatedAttribute.Equals("Max"))
-                                {
-                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                    var changedValue = sublist[1] + "." + "Maximum";
-                                    
-                                    if ((line.Contains(changeAttribute)
-                                         && !line.Contains(@"//")
-                                         && !line.Contains(changedValue)
-
-                                        ))
-                                    {
-                                        line = line.Replace(changeAttribute, changedValue);
-                                    }
-                                }
-
-                                if (deprecatedAttribute.Equals("Min"))
-                                {
-                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                    var changedValue = sublist[1] + "." + "Minimum";
-
-                                    if ((line.Contains(changeAttribute)
-                                         && !line.Contains(@"//")
-                                         && !line.Contains(changedValue)
-
-                                        ))
-                                    {
-                                        line = line.Replace(changeAttribute, changedValue);
-                                    }
-                                }
-                            }
-                        }
-
-                    }
 
                     if (line.Contains(@".FetchRowStyle") && !line.Contains(@".FetchRowStyles"))
                     {
@@ -1001,8 +857,152 @@ namespace vb6Convert
                         //line = @"//" + line;
 
                     }
-                    
 
+                    foreach (var sublist in allVariableNameAndType)
+                    {
+                        if (sublist[0].Equals("PictureBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("DrawMode");
+                            deprecatedAttributeList.Add("DrawStyle");
+                            deprecatedAttributeList.Add("Line");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ComboBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value2");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                    )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("C1.Win.C1TrueDBGrid.C1TrueDBGrid"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Array");
+                            deprecatedAttributeList.Add("FetchStyle");
+                            deprecatedAttributeList.Add("Locked");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ComboBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "SelectedValue";
+                                var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("CheckBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Value"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Checked";
+                                    var cautionValue = sublist[1] + "." + "Value2";
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ProgressBar"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Max");
+                            deprecatedAttributeList.Add("Min");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Max"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Maximum";
+
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+
+                                if (deprecatedAttribute.Equals("Min"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Minimum";
+
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                     if (line.Contains(@"//In code.cs"))
                     {
                         var todoComment = String.Empty;
@@ -1050,8 +1050,8 @@ namespace vb6Convert
                             line = @"//TODO" + "\n" + @"//" + line.TrimStart();
                         }
                     }
-                    
-                   
+
+
                     csContent = csContent + line + "\n";
                 }
                 //csContent = reader.ReadToEnd();
@@ -1059,6 +1059,7 @@ namespace vb6Convert
             }
 
             allTODO_ProblemList.Clear();
+            allTODO_ProblemListDesignerFile.Clear();
 
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
