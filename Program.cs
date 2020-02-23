@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.IO;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace vb6Convert
@@ -15,8 +16,11 @@ namespace vb6Convert
         public static List<string> keyPressEventHandlerList = new List<string>();
         public static List<string> queryUnloadEventHandlerList = new List<string>();
         public static List<string> keyEventHandlerList = new List<string>();
+        public static List<string> mouseEventHandlerList = new List<string>();
         public static List<string> formClosedEventHandlerList = new List<string>();
         public static List<string> allTODO_ProblemList = new List<string>();
+        public static List<string> allTODO_ProblemListDesignerFile = new List<string>();
+        public static List<List<String>> allVariableNameAndType = new List<List<string>>();
 
         static void Main(String[] args)
         {
@@ -41,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmStammZifferList";
+            var formName = "frmTerminAbbuchen";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -97,14 +101,98 @@ namespace vb6Convert
 
                     }
 
+                    if (line.Contains(@"public") && line.EndsWith(@";") && !line.Contains(@"[]"))
+                    {
+                        string oldLine = line;
+                        oldLine = oldLine.Trim();
+                        oldLine = oldLine.Replace(";", "");
+                        var words = oldLine.Split(" ");
+
+                       // Console.WriteLine(oldLine);
+                        foreach (var word in words)
+                        {
+                            //Console.WriteLine(word);
+                        }
+
+                        //Console.WriteLine("Word Count = "+ words.Length);
+
+                        allVariableNameAndType.Add(new List<string> {words[1],words[2]});
+
+                    }
+
+                    foreach (var sublist in allVariableNameAndType)
+                    {
+                        if (sublist[0].Equals("ImageList"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("BackColor");
+                            deprecatedAttributeList.Add("MaskColor");
+                            deprecatedAttributeList.Add("ImageList");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+
+
+                        }
+
+                        if (sublist[0].Equals("TreeView"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("LineStyle");
+                            deprecatedAttributeList.Add("Style");
+                            deprecatedAttributeList.Add("Indentation");
+                            deprecatedAttributeList.Add("NodeClick");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("Timer"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Timer");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "Tick";
+                                //var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute) 
+                                     && !line.Contains(@"//") 
+                                     && !line.Contains(changedValue)
+                                     //&& !line.Contains(cautionValue)
+                                     
+                                     ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+                    }
                     //if (line.Contains(@"[]") && line.Contains(@"("))
-                    //{
-                    //    line = Regex.Replace(line, @"(", @"{");                      
-                    //}
-                    //if (line.Contains(@"[]") && line.Contains(@")"))
-                    //{
-                    //    line = Regex.Replace(line, @")", @"}");          
-                    //}
+                        //{
+                        //    line = Regex.Replace(line, @"(", @"{");                      
+                        //}
+                        //if (line.Contains(@"[]") && line.Contains(@")"))
+                        //{
+                        //    line = Regex.Replace(line, @")", @"}");          
+                        //}
 
                     if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6EventHandler"))
                     {
@@ -120,6 +208,28 @@ namespace vb6Convert
                                 line.LastIndexOf(secondBracket) - startIndex);
 
                             eventHandlerList.Add(eventName);
+                            //Console.WriteLine("EventName = " + eventName);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
+                    if (line.Contains(@"CodeArchitects.VB6Library.Events.VB6MouseEventHandler"))
+                    {
+                        try
+                        {
+                            //Console.WriteLine("Line = " + line);
+                            string firstBracket = "(this.";
+                            char secondBracket = ')';
+                            int startIndex = (int)(line.LastIndexOf(firstBracket) + firstBracket.Length);
+                            //Console.WriteLine("Line length = " + line.Length);
+                            //Console.WriteLine("Start Index = " + startIndex);
+                            string eventName = line.Substring((int)(startIndex),
+                                line.LastIndexOf(secondBracket) - startIndex);
+
+                            mouseEventHandlerList.Add(eventName);
                             //Console.WriteLine("EventName = " + eventName);
                         }
                         catch (ArgumentOutOfRangeException e)
@@ -216,16 +326,26 @@ namespace vb6Convert
                         }
                     }
 
+                    foreach (var todo in allTODO_ProblemListDesignerFile)
+                    {
+                        if (line.Equals(todo))
+                        {
+                            line = @"//TODO" + "\n" + @"//" + line.TrimStart();
+                        }
+                    }
                     designerContent = designerContent + line + "\n";
                 }
                 //designerContent = reader.ReadToEnd();
                 reader.Close();
             }
 
-            //foreach (var events in eventHandlerList)
+            //foreach (List<string> subList in allVariableNameAndType)
             //{
-            //    Console.WriteLine(events);  
+            //    Console.WriteLine(subList[0] +"  " +  subList[1]);
             //}
+
+            #region Prefix Change
+
             designerContent = Regex.Replace(designerContent, @".Appearance = CodeArchitects.VB6Library.VB6AppearanceConstants.Flat;",
                 ".FlatStyle = FlatStyle.Flat;");
             designerContent = Regex.Replace(designerContent, @"QueryUnload += new CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler",
@@ -327,6 +447,9 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
 
+            #endregion
+
+
             using (StringReader reader = new StringReader(designerContent))
             {
                 reader.Close();
@@ -426,7 +549,10 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"DefInstance.Show((int)VBRUN.FormShowConstants.vbModal);", @"DefInstance.ShowDialog();");
                     }
-                    if (line.Contains(@".Clear();") && !line.Contains(@".Items.Clear();") && !line.Contains(@".Err.Clear();"))
+                    if (line.Contains(@".Clear();") 
+                        && !line.Contains(@".Items.Clear();")
+                        && !line.Contains(@".Nodes.Clear();")
+                        && !line.Contains(@".Err.Clear();"))
                     {
                         line = line.Replace(@".Clear();", @".Items.Clear();");
                     }
@@ -434,6 +560,19 @@ namespace vb6Convert
                         || (line.Contains(".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(".Array = mxaListe;") && !line.Contains(@"//"))
                         || (line.Contains("].HeadFont.") && !line.Contains(@"//"))
+                        || (line.Contains("modXUtilities.WindowGetPosition(this);") && !line.Contains(@"//"))
+                        || (line.Contains("modXUtilities.WindowSavePosition(this);") && !line.Contains(@"//"))
+                        || (line.Contains(".Separator = ") && !line.Contains(@"//"))
+                        || (line.Contains("modC_StdPlan_Draw.StdPlan_Init(") && !line.Contains(@"//"))
+                        || (line.Contains("modC_StdPlan_Draw.StdPlan_Draw(") && !line.Contains(@"//"))
+                        || (line.Contains("modC_StdPlan_Vorschau.Plan_Vorschau_Draw(") && !line.Contains(@"//"))
+                        || (line.Contains("modC_StdPlan_Draw.StdPlan_ValuePoint(") && !line.Contains(@"//"))
+                        || (line.Contains("modC_StdPlan_Data.StdPlan_Data_Merge(") && !line.Contains(@"//"))
+                        || (line.Contains("modXControls.Form_Controls_Disable(this);") && !line.Contains(@"//"))
+                        || (line.Contains("Nodes.Add(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(".AddItem(") && !line.Contains(@"//"))
@@ -444,7 +583,153 @@ namespace vb6Convert
                     {
                         allTODO_ProblemList.Add(line);
                     }
-                    if (line.Contains(@".FetchRowStyle"))
+
+                    foreach (var sublist in allVariableNameAndType)
+                    {
+                        if (sublist[0].Equals("PictureBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("DrawMode");
+                            deprecatedAttributeList.Add("DrawStyle");
+                            deprecatedAttributeList.Add("Line");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+                                    
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ComboBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value2");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+                                    
+                                    )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("C1.Win.C1TrueDBGrid.C1TrueDBGrid"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Array");
+                            deprecatedAttributeList.Add("FetchStyle");
+                            deprecatedAttributeList.Add("Locked");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ComboBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "SelectedValue";
+                                var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute) 
+                                     && !line.Contains(@"//") 
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+                                
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("CheckBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Value"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Checked";
+                                    var cautionValue = sublist[1] + "." + "Value2";
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ProgressBar"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Max");
+                            deprecatedAttributeList.Add("Min");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Max"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Maximum";
+                                    
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+
+                                if (deprecatedAttribute.Equals("Min"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Minimum";
+
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    if (line.Contains(@".FetchRowStyle") && !line.Contains(@".FetchRowStyles"))
                     {
                         line = line.Replace(@".FetchRowStyle", @".FetchRowStyles");
                     }
@@ -530,6 +815,21 @@ namespace vb6Convert
                         }
                     }
 
+                    foreach (var eventString in mouseEventHandlerList)
+                    {
+                        string str = "private void " + eventString;
+                        if (line.Contains(str) && line.Contains(@"(") && !line.Contains(@"object sender , MouseEventArgs e"))
+                        {
+                            string firstPart = line.Substring(0, line.LastIndexOf('(') + 1);
+                            string modifiedLine = firstPart + " object sender , MouseEventArgs e )";
+                            line = modifiedLine;
+                            //Console.WriteLine("Modified Line = " + modifiedLine);
+                            break;
+
+                            //line = Regex.Replace(line, @"(", @"{");
+                        }
+                    }
+
                     foreach (var eventString in formClosedEventHandlerList)
                     {
                         string str = "private void " + eventString;
@@ -554,6 +854,13 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"DefInstance.Show(1);", @"DefInstance.ShowDialog();");
 
+                    }
+
+                    if (line.Contains(@"KeyCode == (int) VBRUN.KeyCodeConstants.vbKeyEscape"))
+                    {
+                        line = line.Replace(@"KeyCode == (int) VBRUN.KeyCodeConstants.vbKeyEscape",
+                            @"e.KeyCode == Keys.Escape");
+                        //Console.WriteLine("LALALALA");
                     }
 
                     if (line.Contains(@"KeyAscii == (int) VBRUN.KeyCodeConstants.vbKeyEscape"))
@@ -632,6 +939,18 @@ namespace vb6Convert
                     {
                         var todoComment = String.Empty;
                         foreach (var TODO in allTODO_ProblemList)
+                        {
+                            todoComment = todoComment + "\n" + @"//" + TODO.TrimStart();
+                        }
+
+                        //Console.WriteLine("TODOcommect = " + todoComment);
+                        line = line + todoComment;
+                    }
+
+                    if (line.Contains(@"//In Designer.cs"))
+                    {
+                        var todoComment = String.Empty;
+                        foreach (var TODO in allTODO_ProblemListDesignerFile)
                         {
                             todoComment = todoComment + "\n" + @"//" + TODO.TrimStart();
                         }
