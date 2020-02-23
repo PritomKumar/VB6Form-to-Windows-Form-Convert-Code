@@ -561,6 +561,7 @@ namespace vb6Convert
                                 Console.WriteLine("Before Attribute = " + beforeAttribute);
                                 deprecatedAttributeList.Add("FetchStyle");
                                 deprecatedAttributeList.Add("Locked");
+                                deprecatedAttributeList.Add("HeadingStyle");
 
                                 foreach (var deprecatedAttribute in deprecatedAttributeList)
                                 {
