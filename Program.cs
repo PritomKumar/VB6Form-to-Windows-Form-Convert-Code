@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminAbbuchen";
+            var formName = "frmTerminAbsagen";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -55,6 +55,7 @@ namespace vb6Convert
 
             ReplaceInDesignerFile(desingerFilePath);
             ReplaceInCsFile(csFilePath);
+            ReplaceInDesignerFileTODOWorks(desingerFilePath);
             ReplaceInCsFileTODOWorks(csFilePath);
 
             //FreeAgent freeAgent = new FreeAgent();
@@ -89,102 +90,16 @@ namespace vb6Convert
                     }
                     else if (line.Contains(@"InitializeComponents();"))
                     {
-
                         line = "InitializeComponent();";
-
                     }
 
                     if (line.Contains(@"CodeArchitects.VB6Library.VB6ControlArrayCS"))
                     {
                         line = line.Replace("(", "{");
                         line = line.Replace(")", "}");
-
                     }
 
-                    if (line.Contains(@"public") && line.EndsWith(@";") && !line.Contains(@"[]"))
-                    {
-                        string oldLine = line;
-                        oldLine = oldLine.Trim();
-                        oldLine = oldLine.Replace(";", "");
-                        var words = oldLine.Split(" ");
-
-                       // Console.WriteLine(oldLine);
-                        foreach (var word in words)
-                        {
-                            //Console.WriteLine(word);
-                        }
-
-                        //Console.WriteLine("Word Count = "+ words.Length);
-
-                        allVariableNameAndType.Add(new List<string> {words[1],words[2]});
-
-                    }
-
-                    foreach (var sublist in allVariableNameAndType)
-                    {
-                        if (sublist[0].Equals("ImageList"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("BackColor");
-                            deprecatedAttributeList.Add("MaskColor");
-                            deprecatedAttributeList.Add("ImageList");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var todoChange = sublist[1] + "." + deprecatedAttribute;
-                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
-
-                                )
-                                {
-                                    allTODO_ProblemListDesignerFile.Add(line);
-                                }
-                            }
-
-
-                        }
-
-                        if (sublist[0].Equals("TreeView"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("LineStyle");
-                            deprecatedAttributeList.Add("Style");
-                            deprecatedAttributeList.Add("Indentation");
-                            deprecatedAttributeList.Add("NodeClick");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var todoChange = sublist[1] + "." + deprecatedAttribute;
-                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
-
-                                )
-                                {
-                                    allTODO_ProblemListDesignerFile.Add(line);
-                                }
-                            }
-                        }
-
-                        if (sublist[0].Equals("Timer"))
-                        {
-                            var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("Timer");
-
-                            foreach (var deprecatedAttribute in deprecatedAttributeList)
-                            {
-                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                var changedValue = sublist[1] + "." + "Tick";
-                                //var cautionValue = sublist[1] + "." + "Value2";
-                                if ((line.Contains(changeAttribute) 
-                                     && !line.Contains(@"//") 
-                                     && !line.Contains(changedValue)
-                                     //&& !line.Contains(cautionValue)
-                                     
-                                     ))
-                                {
-                                    line = line.Replace(changeAttribute, changedValue);
-                                }
-                            }
-                        }
-                    }
+                    
                     //if (line.Contains(@"[]") && line.Contains(@"("))
                         //{
                         //    line = Regex.Replace(line, @"(", @"{");                      
@@ -326,13 +241,7 @@ namespace vb6Convert
                         }
                     }
 
-                    foreach (var todo in allTODO_ProblemListDesignerFile)
-                    {
-                        if (line.Equals(todo))
-                        {
-                            line = @"//TODO" + "\n" + @"//" + line.TrimStart();
-                        }
-                    }
+                 
                     designerContent = designerContent + line + "\n";
                 }
                 //designerContent = reader.ReadToEnd();
@@ -557,7 +466,7 @@ namespace vb6Convert
                         line = line.Replace(@".Clear();", @".Items.Clear();");
                     }
                     if ((line.Contains(@".ZOrder") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(".Array = mxaListe;") && !line.Contains(@"//"))
                         || (line.Contains("].HeadFont.") && !line.Contains(@"//"))
                         || (line.Contains("modXUtilities.WindowGetPosition(this);") && !line.Contains(@"//"))
@@ -569,15 +478,15 @@ namespace vb6Convert
                         || (line.Contains("modC_StdPlan_Draw.StdPlan_ValuePoint(") && !line.Contains(@"//"))
                         || (line.Contains("modC_StdPlan_Data.StdPlan_Data_Merge(") && !line.Contains(@"//"))
                         || (line.Contains("modXControls.Form_Controls_Disable(this);") && !line.Contains(@"//"))
-                        || (line.Contains("Nodes.Add(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains("mod_Language.SetCurrentLanguage(this);") && !line.Contains(@"//"))
+                        || (line.Contains(@"Nodes.Add(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@"mod_Language.SetCurrentLanguage(this);") && !line.Contains(@"//"))
 
                     )
                     {
@@ -729,6 +638,7 @@ namespace vb6Convert
                         }
 
                     }
+
                     if (line.Contains(@".FetchRowStyle") && !line.Contains(@".FetchRowStyles"))
                     {
                         line = line.Replace(@".FetchRowStyle", @".FetchRowStyles");
@@ -914,6 +824,164 @@ namespace vb6Convert
             }
         }
 
+        public static void ReplaceInDesignerFileTODOWorks(string filePath)
+        {
+
+            csContent = string.Empty;
+            string line = string.Empty;
+            string previousLine = String.Empty;
+
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if ((
+                        line.Contains(@""))
+                        && !line.Contains(@"//"))
+                    {
+                        //line = line.TrimStart();
+                        //line = @"//" + line;
+
+                    }
+
+                    if (line.Contains(@"public") && line.EndsWith(@";") && !line.Contains(@"[]"))
+                    {
+                        string oldLine = line;
+                        oldLine = oldLine.Trim();
+                        oldLine = oldLine.Replace(";", "");
+                        var words = oldLine.Split(" ");
+
+                        // Console.WriteLine(oldLine);
+                        foreach (var word in words)
+                        {
+                            //Console.WriteLine(word);
+                        }
+
+                        //Console.WriteLine("Word Count = "+ words.Length);
+
+                        allVariableNameAndType.Add(new List<string> { words[1], words[2] });
+
+                    }
+
+                    foreach (var sublist in allVariableNameAndType)
+                    {
+                        if (sublist[0].Equals("ImageList"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("BackColor");
+                            deprecatedAttributeList.Add("MaskColor");
+                            deprecatedAttributeList.Add("ImageList");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+
+
+                        }
+
+                        if (sublist[0].Equals("TreeView"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("LineStyle");
+                            deprecatedAttributeList.Add("Style");
+                            deprecatedAttributeList.Add("Indentation");
+                            deprecatedAttributeList.Add("NodeClick");
+                            deprecatedAttributeList.Add("SingleSel");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("Timer"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Timer");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "Tick";
+                                //var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     //&& !line.Contains(cautionValue)
+
+                                     ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+                    if (line.Contains(@""))
+                    {
+                        //line = line.Replace( @"", @"");
+                    }
+
+                    foreach (var todo in allTODO_ProblemListDesignerFile)
+                    {
+                        if (line.Equals(todo))
+                        {
+                            line = @"//TODO" + "\n" + @"//" + line.TrimStart();
+                        }
+                    }
+
+
+                    csContent = csContent + line + "\n";
+                }
+                //csContent = reader.ReadToEnd();
+                reader.Close();
+            }
+
+            allTODO_ProblemList.Clear();
+
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"", @"");
+
+            using (StringReader reader = new StringReader(csContent))
+            {
+
+                reader.Close();
+            }
+
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.Write(csContent);
+                writer.Close();
+            }
+        }
         public static void ReplaceInCsFileTODOWorks(string filePath)
         {
 
