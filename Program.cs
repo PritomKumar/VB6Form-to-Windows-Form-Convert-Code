@@ -335,7 +335,6 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @".StartUpPosition = CodeArchitects.VB6Library.VBRUN.StartUpPositionConstants.vbStartUpWindowsDefault;",
                 @".StartPosition = FormStartPosition.WindowsDefaultLocation;");
             designerContent = Regex.Replace(designerContent, @"SoftPlus.MigratedControls.VB6PVTime", @"DateTimePicker");
-            designerContent = Regex.Replace(designerContent, @".Change ", @".TextChanged ");
             designerContent = Regex.Replace(designerContent, @"QueryUnload ", @"FormClosing ");
             designerContent = Regex.Replace(designerContent, @"Activate ", @"Activated ");
             designerContent = Regex.Replace(designerContent, @"Unload ", @"FormClosed    ");
@@ -484,7 +483,7 @@ namespace vb6Convert
                         || (line.Contains(@"Nodes.Add(") && !line.Contains(@"//"))
                         || (line.Contains(@"mod_FITplus.LoadFITplusMitarbeiter(") && !line.Contains(@"//"))
                         || (line.Contains(@"mod_FITplus.LoadFITplusAbos(") && !line.Contains(@"//"))
-                        || (line.Contains(@"modXControls.Form_Controls_Reable(") && !line.Contains(@"//"))
+                        || (line.Contains(@"modXControls.Form_Controls_Reable(this)") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
@@ -592,6 +591,28 @@ namespace vb6Convert
                                 var changeAttribute = sublist[1] + "." + deprecatedAttribute;
                                 var changedValue = sublist[1] + "." + "SelectedValue";
                                 var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("TextBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Change");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "TextChanged";
+                                var cautionValue = sublist[1] + "." + "HeightChange";
                                 if ((line.Contains(changeAttribute)
                                      && !line.Contains(@"//")
                                      && !line.Contains(changedValue)
