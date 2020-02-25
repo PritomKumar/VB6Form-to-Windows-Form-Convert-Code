@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTvPickPrint";
+            var formName = "frmTvSerienBriefe";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
