@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminProtokoll";
+            var formName = "frmTerminSuche";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -94,6 +94,11 @@ namespace vb6Convert
                     }
 
                     if (line.Contains(@"CodeArchitects.VB6Library.VB6ControlArrayCS"))
+                    {
+                        line = line.Replace("(", "{");
+                        line = line.Replace(")", "}");
+                    }
+                    if (line.Contains(@"VB6ControlArrayCS"))
                     {
                         line = line.Replace("(", "{");
                         line = line.Replace(")", "}");
@@ -307,6 +312,7 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6FrameNoBorder", "GroupBox");
             designerContent = Regex.Replace(designerContent, "SoftPlus.MigratedControls.VB6PVDate2", "DateTimePicker");
             designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6ControlArrayCS<", "");
+            designerContent = Regex.Replace(designerContent, "VB6ControlArrayCS<", "");
             designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.Events.VB6KeyEventHandler", "KeyEventHandler");
             designerContent = Regex.Replace(designerContent, "SoftPlus.MigratedControls.VB6TDBGrid", "C1.Win.C1TrueDBGrid.C1TrueDBGrid");
             designerContent = Regex.Replace(designerContent, @".Alignment = CodeArchitects.VB6Library.VBRUN.AlignmentConstants.vbCenter;",
@@ -499,7 +505,7 @@ namespace vb6Convert
                         || (line.Contains(@"mod_FITplus.LoadFITplusAbos(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXControls.Form_Controls_Reable(this)") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXUtilities.WindowGetPosition(") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modT_Settings.SetAlternateGridColor(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
@@ -568,6 +574,32 @@ namespace vb6Convert
                                     ))
                                 {
                                     allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("RadioButton[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Value"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue =  "Checked";
+                                    var cautionValue =  "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
                                 }
                             }
                         }
