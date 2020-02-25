@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminPatientListe";
+            var formName = "frmTerminPrivatEdit";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -593,6 +593,23 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("Label"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("BackStyle");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("TextBox"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -615,6 +632,7 @@ namespace vb6Convert
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Array");
                             deprecatedAttributeList.Add("SelBookmarks");
+                            deprecatedAttributeList.Add("RowDividerStyle");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
@@ -633,7 +651,7 @@ namespace vb6Convert
                                 var changeAttribute = sublist[1] + "." + deprecatedAttribute;
                                 var changedValue = sublist[1] + "." + "RowCount";
                                 var cautionValue = sublist[1] + "." + "Value2";
-                                if ((line.Contains(changeAttribute)
+                                if ((line.Contains("ApproxCount")
                                      && !line.Contains(@"//")
                                      && !line.Contains(changedValue)
                                      && !line.Contains(cautionValue)
