@@ -484,7 +484,7 @@ namespace vb6Convert
                         || (line.Contains(@"Nodes.Add(") && !line.Contains(@"//"))
                         || (line.Contains(@"mod_FITplus.LoadFITplusMitarbeiter(") && !line.Contains(@"//"))
                         || (line.Contains(@"mod_FITplus.LoadFITplusAbos(") && !line.Contains(@"//"))
-                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@"modXControls.Form_Controls_Reable(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
