@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminSuche";
+            var formName = "frmTerminUmbuchen";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -603,6 +603,33 @@ namespace vb6Convert
                                 }
                             }
                         }
+
+                        if (sublist[0].Equals("CheckBox[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Value"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue = "Checked";
+                                    var cautionValue = "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
 
                         if (sublist[0].Equals("ComboBox[]"))
                         {
