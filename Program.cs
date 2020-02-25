@@ -606,11 +606,11 @@ namespace vb6Convert
                             }
                         }
 
-
                         if (sublist[0].Equals("C1.Win.C1TrueDBGrid.C1TrueDBGrid")) //Normal TrueDBGrid
                         {
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Array");
+                            deprecatedAttributeList.Add("SelBookmarks");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
@@ -620,6 +620,23 @@ namespace vb6Convert
                                 )
                                 {
                                     allTODO_ProblemList.Add(line);
+                                }
+                            }
+
+                            deprecatedAttributeList.Add("ApproxCount");
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "RowCount";
+                                var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
                                 }
                             }
                         }
