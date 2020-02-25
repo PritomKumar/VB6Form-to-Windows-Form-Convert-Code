@@ -587,6 +587,24 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("TextBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Locked");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+
                         if (sublist[0].Equals("C1.Win.C1TrueDBGrid.C1TrueDBGrid")) //Normal TrueDBGrid
                         {
                             var deprecatedAttributeList = new List<String>();
