@@ -419,6 +419,17 @@ namespace vb6Convert
                             @"e.CloseReason == (int) VBRUN.QueryUnloadConstants.vbFormControlMenu");
                     }
 
+                    if (line.Contains(@".ToolTipText = "))
+                    {
+                        string newLine = line;
+                        newLine = newLine.TrimStart();
+                        newLine = newLine.Replace(".ToolTipText = ", ", ");
+                        newLine = newLine.Replace(";", "");
+                        newLine = "this.ToolTip1.SetToolTip(this." + newLine + ");";
+                        line = newLine;
+                        //Console.WriteLine("New Line = " + newLine);
+                    }
+
                     if (line.Contains(@"Cancel = 1;"))
                     {
                         line = line.Replace(@"Cancel = 1;", @"e.Cancel = true;");
