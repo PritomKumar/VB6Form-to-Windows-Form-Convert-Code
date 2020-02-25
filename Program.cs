@@ -604,6 +604,32 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("ComboBox[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Value");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Value"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue = "SelectedValue";
+                                    var cautionValue = "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("ComboBox"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -1038,7 +1064,9 @@ namespace vb6Convert
             csContent = Regex.Replace(csContent, @"this.hWnd", @"(int)this.Handle");
             csContent = Regex.Replace(csContent, @".SelStart", @".SelectionStart");
             csContent = Regex.Replace(csContent, @".SelLength", @".SelectionLength");
-            csContent = Regex.Replace(csContent, @"", @"");
+            csContent = Regex.Replace(csContent, @"VBRUN.CheckBoxConstants.vbChecked", @"true");
+            csContent = Regex.Replace(csContent, @"VBRUN.CheckBoxConstants.vbUnchecked", @"false");
+            csContent = Regex.Replace(csContent, @"float", @"int");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
