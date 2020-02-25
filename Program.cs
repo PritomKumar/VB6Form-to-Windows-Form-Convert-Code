@@ -630,6 +630,32 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("DateTimePicker[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Time");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Time"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue = "Value";
+                                    var cautionValue = "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("ComboBox"))
                         {
                             var deprecatedAttributeList = new List<String>();
