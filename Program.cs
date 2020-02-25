@@ -903,9 +903,10 @@ namespace vb6Convert
                     {
                         line = line.Replace(@".FetchRowStyle", @".FetchRowStyles");
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@"Cancel = (short)(true ? -1 : 0);"))
                     {
-                        //line = line.Replace( @"", @"");
+                        line = line.Replace(@"Cancel = (short)(true ? -1 : 0);",
+                            @"e.Cancel = (true ? true : false);");
                     }
                     if (line.Contains(@""))
                     {
