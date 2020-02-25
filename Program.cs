@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminUmbuchen";
+            var formName = "frmTvHighEdit";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -629,7 +629,6 @@ namespace vb6Convert
                                 }
                             }
                         }
-
 
                         if (sublist[0].Equals("ComboBox[]"))
                         {
@@ -1261,6 +1260,28 @@ namespace vb6Convert
                                      //&& !line.Contains(cautionValue)
 
                                      ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("Label"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Change");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "TextChanged";
+                                var cautionValue = sublist[1] + "." + "HeightChange";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+
+                                    ))
                                 {
                                     line = line.Replace(changeAttribute, changedValue);
                                 }
