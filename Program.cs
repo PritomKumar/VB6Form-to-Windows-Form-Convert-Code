@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminPatientEdit";
+            var formName = "frmTerminPatientListe";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -634,7 +634,7 @@ namespace vb6Convert
                                                                 line.Substring(line.LastIndexOf("["),
                                                           line.LastIndexOf("]") - line.LastIndexOf("[") + 1);
 
-                                Console.WriteLine("Before Attribute = " + beforeAttribute);
+                                //Console.WriteLine("Before Attribute = " + beforeAttribute);
                                 deprecatedAttributeList.Add("FetchStyle");
                                 deprecatedAttributeList.Add("Locked");
                                 deprecatedAttributeList.Add("HeadingStyle");
@@ -1047,6 +1047,28 @@ namespace vb6Convert
                             }
 
 
+                        }
+
+                        if (sublist[0].Equals("PictureBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Picture");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = "this." + sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = "this." + sublist[1] + "." + "Image";
+                                //var cautionValue = sublist[1] + "." + "Value2";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                        //&& !line.Contains(cautionValue)
+
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
                         }
 
                         if (sublist[0].Equals("TreeView"))
