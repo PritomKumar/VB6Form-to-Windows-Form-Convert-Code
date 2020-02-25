@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminPrivatEdit";
+            var formName = "frmTerminProtokoll";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -498,7 +498,7 @@ namespace vb6Convert
                         || (line.Contains(@"mod_FITplus.LoadFITplusMitarbeiter(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"mod_FITplus.LoadFITplusAbos(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXControls.Form_Controls_Reable(this)") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modXUtilities.WindowGetPosition(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
