@@ -522,6 +522,7 @@ namespace vb6Convert
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Value2");
                             deprecatedAttributeList.Add("set_ItemData(");
+                            deprecatedAttributeList.Add("get_ItemData(");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
