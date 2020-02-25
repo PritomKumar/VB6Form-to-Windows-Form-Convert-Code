@@ -527,6 +527,47 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("Button[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Appearance");
+                            deprecatedAttributeList.Add("FontBold");
+                        
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                
+                                var todoChange = sublist[1];
+                                var commentCheck = line.TrimStart();
+                                if ((line.Contains(todoChange) && !commentCheck.StartsWith(@"//") 
+                                                               && (line.Contains(deprecatedAttribute))
+
+                                ))
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("Label[]"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("BackStyle");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+
+                                var todoChange = sublist[1];
+                                var commentCheck = line.TrimStart();
+                                if ((line.Contains(todoChange) && !commentCheck.StartsWith(@"//")
+                                                               && (line.Contains(deprecatedAttribute))
+
+                                    ))
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("ComboBox"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -946,7 +987,7 @@ namespace vb6Convert
 
                     }
 
-                    if (line.Contains(@"public") && line.EndsWith(@";") && !line.Contains(@"[]"))
+                    if (line.Contains(@"public") && line.EndsWith(@";") )
                     {
                         string oldLine = line;
                         oldLine = oldLine.Trim();
