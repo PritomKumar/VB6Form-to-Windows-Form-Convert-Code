@@ -1197,9 +1197,25 @@ namespace vb6Convert
                                     allTODO_ProblemListDesignerFile.Add(line);
                                 }
                             }
-
-
                         }
+
+                        if (sublist[0].Equals("ToolStripMenuItem"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Shortcut");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+                        }
+
 
                         if (sublist[0].Equals("PictureBox"))
                         {
