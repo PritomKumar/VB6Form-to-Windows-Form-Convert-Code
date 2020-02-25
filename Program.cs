@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminAbsagen";
+            var formName = "frmTerminPatientEdit";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -54,7 +54,7 @@ namespace vb6Convert
             //ReplaceInFile("F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\frmRgEinzahlungBuchen.Designer.cs");
 
             ReplaceInDesignerFile(desingerFilePath);
-            ReplaceInDesignerFileTODOWorks(desingerFilePath);
+            ReplaceInDesignerFileTODOWorks(desingerFilePath);   
             ReplaceInCsFile(csFilePath);
             ReplaceInCsFileTODOWorks(csFilePath);
 
@@ -350,6 +350,9 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6CheckedListBox", @"ListBox");
             designerContent = Regex.Replace(designerContent, @".Multiline = true;", @".MultiLine = DefaultBoolean.True;");
             designerContent = Regex.Replace(designerContent, @"SoftPlus.MigratedControls.SP_ComboText", @"ComboBox");
+            designerContent = Regex.Replace(designerContent, @"SP_ComboText", @"ComboBox");
+            designerContent = Regex.Replace(designerContent, @"VB6PVTime", @"DateTimePicker");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6ComboBox", @"ComboBox");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
@@ -479,8 +482,8 @@ namespace vb6Convert
                         || (line.Contains("modC_StdPlan_Data.StdPlan_Data_Merge(") && !line.Contains(@"//"))
                         || (line.Contains("modXControls.Form_Controls_Disable(this);") && !line.Contains(@"//"))
                         || (line.Contains(@"Nodes.Add(") && !line.Contains(@"//"))
-                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
-                        || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
+                        || (line.Contains(@"mod_FITplus.LoadFITplusMitarbeiter(") && !line.Contains(@"//"))
+                        || (line.Contains(@"mod_FITplus.LoadFITplusAbos(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
                         || (line.Contains(@".AddItem(") && !line.Contains(@"//"))
@@ -660,6 +663,23 @@ namespace vb6Convert
                                     {
                                         line = line.Replace(changeAttribute, changedValue);
                                     }
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("DateTimePicker")) //Normal TrueDBGrid
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("DateString");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
                                 }
                             }
                         }
