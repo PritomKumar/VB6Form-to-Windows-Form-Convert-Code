@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTvSerienBriefe";
+            var formName = "frmUDruckVorschau";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -358,9 +358,9 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"SP_ComboText", @"ComboBox");
             designerContent = Regex.Replace(designerContent, @"VB6PVTime", @"DateTimePicker");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6ComboBox", @"ComboBox");
-            designerContent = Regex.Replace(designerContent, @"", @"");
-            designerContent = Regex.Replace(designerContent, @"", @"");
-            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6UpDown", @"NumericUpDown");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6HScrollBar", @"HScrollBar");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6VScrollBar", @"VScrollBar");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
 
@@ -506,6 +506,8 @@ namespace vb6Convert
                         || (line.Contains(@"modXControls.Form_Controls_Reable(this)") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXUtilities.WindowGetPosition(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modT_Settings.SetAlternateGridColor(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modD_Kart_Graph.Graph_Preview(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
