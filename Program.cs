@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmUDruckWahl";
+            var formName = "frmOption";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -361,7 +361,8 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6UpDown", @"NumericUpDown");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6HScrollBar", @"HScrollBar");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6VScrollBar", @"VScrollBar");
-            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"Value = CodeArchitects.VB6Library.VBRUN.CheckBoxConstants.vbChecked;", @"Checked = true;");
+            designerContent = Regex.Replace(designerContent, @"Value = CodeArchitects.VB6Library.VBRUN.CheckBoxConstants.vbUnchecked;", @"Checked = false;");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
@@ -1291,6 +1292,7 @@ namespace vb6Convert
                             deprecatedAttributeList.Add("Indentation");
                             deprecatedAttributeList.Add("NodeClick");
                             deprecatedAttributeList.Add("SingleSel");
+                            deprecatedAttributeList.Add("Collapse");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
