@@ -363,6 +363,8 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6VScrollBar", @"VScrollBar");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"", @"");
 
             #endregion
 
@@ -1222,6 +1224,25 @@ namespace vb6Convert
                                 }
                             }
                         }
+
+                        if (sublist[0].Equals("NumericUpDown"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("SyncBuddy");
+                            deprecatedAttributeList.Add("BuddyControl_");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+                        }
+                        
 
                         if (sublist[0].Equals("ToolStripMenuItem"))
                         {
