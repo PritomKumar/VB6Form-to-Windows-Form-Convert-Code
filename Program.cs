@@ -870,8 +870,6 @@ namespace vb6Convert
                             }
                         }
 
-                        
-
                         if (sublist[0].Equals("CheckBox"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -1371,6 +1369,48 @@ namespace vb6Convert
                                     ))
                                 {
                                     line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("ProgressBar")
+                            || sublist[0].Equals("NumericUpDown")
+                            )
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Max");
+                            deprecatedAttributeList.Add("Min");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Max"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Maximum";
+
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+
+                                if (deprecatedAttribute.Equals("Min"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Minimum";
+
+                                    if ((line.Contains(changeAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
                                 }
                             }
                         }
