@@ -759,6 +759,7 @@ namespace vb6Convert
                             deprecatedAttributeList.Add("FontName");
                             deprecatedAttributeList.Add("Flags");
                             deprecatedAttributeList.Add("CancelError");
+                            deprecatedAttributeList.Add("Color");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
