@@ -54,7 +54,7 @@ namespace vb6Convert
             //ReplaceInFile("F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\frmRgEinzahlungBuchen.Designer.cs");
 
             ReplaceInDesignerFile(desingerFilePath);
-            ReplaceInDesignerFileTODOWorks(desingerFilePath);   
+            ReplaceInDesignerFileTODOWorks(desingerFilePath);
             ReplaceInCsFile(csFilePath);
             ReplaceInCsFileTODOWorks(csFilePath);
 
@@ -546,13 +546,13 @@ namespace vb6Convert
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Appearance");
                             deprecatedAttributeList.Add("FontBold");
-                        
+
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
-                                
+
                                 var todoChange = sublist[1];
                                 var commentCheck = line.TrimStart();
-                                if ((line.Contains(todoChange) && !commentCheck.StartsWith(@"//") 
+                                if ((line.Contains(todoChange) && !commentCheck.StartsWith(@"//")
                                                                && (line.Contains(deprecatedAttribute))
 
                                 ))
@@ -592,8 +592,8 @@ namespace vb6Convert
                                 if (deprecatedAttribute.Equals("Value"))
                                 {
                                     var variableName = sublist[1];
-                                    var changedValue =  "Checked";
-                                    var cautionValue =  "Value2";
+                                    var changedValue = "Checked";
+                                    var cautionValue = "Value2";
                                     if ((line.Contains(variableName)
                                          && line.Contains(deprecatedAttribute)
                                          && !line.Contains(@"//")
@@ -728,6 +728,26 @@ namespace vb6Convert
                         {
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Locked");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("PictureBox")
+                             || sublist[0].Equals("VScrollBar")
+                             || sublist[0].Equals("HScrollBar")
+                            )
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Move");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
@@ -1185,7 +1205,7 @@ namespace vb6Convert
 
                     }
 
-                    if (line.Contains(@"public") && line.EndsWith(@";") )
+                    if (line.Contains(@"public") && line.EndsWith(@";"))
                     {
                         string oldLine = line;
                         oldLine = oldLine.Trim();
@@ -1241,8 +1261,8 @@ namespace vb6Convert
                                     allTODO_ProblemListDesignerFile.Add(line);
                                 }
                             }
+
                         }
-                        
 
                         if (sublist[0].Equals("ToolStripMenuItem"))
                         {
@@ -1275,7 +1295,7 @@ namespace vb6Convert
                                 if ((line.Contains(changeAttribute)
                                      && !line.Contains(@"//")
                                      && !line.Contains(changedValue)
-                                        //&& !line.Contains(cautionValue)
+                                    //&& !line.Contains(cautionValue)
 
                                     ))
                                 {
@@ -1420,7 +1440,7 @@ namespace vb6Convert
 
                     }
 
-                    
+
                     if (line.Contains(@"//In code.cs"))
                     {
                         var todoComment = String.Empty;
