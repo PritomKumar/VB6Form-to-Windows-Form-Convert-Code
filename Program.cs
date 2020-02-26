@@ -917,7 +917,9 @@ namespace vb6Convert
                             }
                         }
 
-                        if (sublist[0].Equals("ProgressBar"))
+                        if (sublist[0].Equals("ProgressBar") 
+                            || sublist[0].Equals("NumericUpDown")
+                            )
                         {
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("Max");
