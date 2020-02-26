@@ -753,6 +753,25 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("OpenFileDialog"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("FontName");
+                            deprecatedAttributeList.Add("Flags");
+                            deprecatedAttributeList.Add("CancelError");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("Label"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -879,17 +898,21 @@ namespace vb6Convert
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
-                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                var changedValue = sublist[1] + "." + "SelectedValue";
-                                var cautionValue = sublist[1] + "." + "Value2";
-                                if ((line.Contains(changeAttribute)
-                                     && !line.Contains(@"//")
-                                     && !line.Contains(changedValue)
-                                     && !line.Contains(cautionValue)
-
-                                    ))
+                                if (deprecatedAttribute.Equals("Value"))
                                 {
-                                    line = line.Replace(changeAttribute, changedValue);
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "SelectedValue";
+                                    var cautionValue = sublist[1] + "." + "Value2";
+                                    var commentCheck = line.TrimStart();
+                                    if ((line.Contains(changeAttribute)
+                                         && !commentCheck.StartsWith(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
                                 }
                             }
                         }
@@ -901,17 +924,21 @@ namespace vb6Convert
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
-                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
-                                var changedValue = sublist[1] + "." + "Checked";
-                                var cautionValue = sublist[1] + "." + "Value2";
-                                if ((line.Contains(changeAttribute)
-                                     && !line.Contains(@"//")
-                                     && !line.Contains(changedValue)
-                                     && !line.Contains(cautionValue)
-
-                                    ))
+                                if (deprecatedAttribute.Equals("Value"))
                                 {
-                                    line = line.Replace(changeAttribute, changedValue);
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Checked";
+                                    var cautionValue = sublist[1] + "." + "Value2";
+                                    var commentCheck = line.TrimStart();
+                                    if ((line.Contains(changeAttribute)
+                                         && !commentCheck.StartsWith(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
                                 }
                             }
                         }
@@ -928,8 +955,36 @@ namespace vb6Convert
                                     var changeAttribute = sublist[1] + "." + deprecatedAttribute;
                                     var changedValue = sublist[1] + "." + "Checked";
                                     var cautionValue = sublist[1] + "." + "Value2";
+                                    var commentCheck = line.TrimStart();
                                     if ((line.Contains(changeAttribute)
-                                         && !line.Contains(@"//")
+                                         && !commentCheck.StartsWith(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(changeAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("OpenFileDialog"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("DialogTitle");
+                            deprecatedAttributeList.Add("CancelError");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("DialogTitle"))
+                                {
+                                    var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                    var changedValue = sublist[1] + "." + "Title";
+                                    var cautionValue = sublist[1] + "." + "Value2";
+                                    var commentCheck = line.TrimStart();
+                                    if ((line.Contains(changeAttribute)
+                                         && !commentCheck.StartsWith(@"//")
                                          && !line.Contains(changedValue)
                                          && !line.Contains(cautionValue)
 
