@@ -661,6 +661,51 @@ namespace vb6Convert
                             }
                         }
 
+                        if (sublist[0].Equals("NumericUpDown[]")
+                        )
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Max");
+                            deprecatedAttributeList.Add("Min");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                if (deprecatedAttribute.Equals("Max"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue = "Maximum";
+                                    var cautionValue = "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
+                                }
+
+                                if (deprecatedAttribute.Equals("Min"))
+                                {
+                                    var variableName = sublist[1];
+                                    var changedValue = "Minimum";
+                                    var cautionValue = "Value2";
+                                    if ((line.Contains(variableName)
+                                         && line.Contains(deprecatedAttribute)
+                                         && !line.Contains(@"//")
+                                         && !line.Contains(changedValue)
+                                         && !line.Contains(cautionValue)
+
+                                        ))
+                                    {
+                                        line = line.Replace(deprecatedAttribute, changedValue);
+                                    }
+                                }
+                            }
+                        }
+
                         if (sublist[0].Equals("DateTimePicker[]"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -919,7 +964,6 @@ namespace vb6Convert
 
                         if (sublist[0].Equals("ProgressBar") 
                             || sublist[0].Equals("NumericUpDown")
-                            || sublist[0].Equals("NumericUpDown[]")
                             )
                         {
                             var deprecatedAttributeList = new List<String>();
