@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmOption";
+            var formName = "frmUStatusSave";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -353,7 +353,6 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6ListBox", @"ListBox");
             designerContent = Regex.Replace(designerContent, @".DblClick ", @".DoubleClick ");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6CheckedListBox", @"ListBox");
-            designerContent = Regex.Replace(designerContent, @".Multiline = true;", @".MultiLine = DefaultBoolean.True;");
             designerContent = Regex.Replace(designerContent, @"SoftPlus.MigratedControls.SP_ComboText", @"ComboBox");
             designerContent = Regex.Replace(designerContent, @"SP_ComboText", @"ComboBox");
             designerContent = Regex.Replace(designerContent, @"VB6PVTime", @"DateTimePicker");
@@ -510,7 +509,7 @@ namespace vb6Convert
                         || (line.Contains(@"modXUtilities.WindowGetPosition(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modT_Settings.SetAlternateGridColor(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modD_Kart_Graph.Graph_Preview(") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modD_Aus_Backup.TermineText_Versuchen(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
@@ -1448,6 +1447,23 @@ namespace vb6Convert
                                      ))
                                 {
                                     line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("StatusBar"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("StatusStrip");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
                                 }
                             }
                         }
