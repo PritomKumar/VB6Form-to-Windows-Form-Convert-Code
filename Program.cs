@@ -363,7 +363,7 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.VB6VScrollBar", @"VScrollBar");
             designerContent = Regex.Replace(designerContent, @"Value = CodeArchitects.VB6Library.VBRUN.CheckBoxConstants.vbChecked;", @"Checked = true;");
             designerContent = Regex.Replace(designerContent, @"Value = CodeArchitects.VB6Library.VBRUN.CheckBoxConstants.vbUnchecked;", @"Checked = false;");
-            designerContent = Regex.Replace(designerContent, @"", @"");
+            designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.MSComctlLib.LabelEditConstants.tvwAutomatic;", @"false;");
             designerContent = Regex.Replace(designerContent, @"", @"");
             designerContent = Regex.Replace(designerContent, @"", @"");
 
@@ -896,6 +896,28 @@ namespace vb6Convert
                             }
                         }
 
+                        //TreeView.Nodes
+                        if (sublist[0].Equals("TreeView")) 
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Selected");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = deprecatedAttribute;
+                                var checkNodes = ".Nodes[";
+                                if ((line.Contains(todoChange)
+                                     && line.Contains(checkNodes)
+                                     && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+
                         if (sublist[0].Equals("ProgressBar") 
                             || sublist[0].Equals("NumericUpDown")
                             )
@@ -942,6 +964,8 @@ namespace vb6Convert
                         {
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("DateString");
+                            deprecatedAttributeList.Add("Minute =");
+                            deprecatedAttributeList.Add("Hour =");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
