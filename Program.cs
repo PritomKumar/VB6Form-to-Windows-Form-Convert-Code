@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmXDbWartung";
+            var formName = "frmTerminPatientEcho";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -510,6 +510,9 @@ namespace vb6Convert
                         || (line.Contains(@"modT_Settings.SetAlternateGridColor(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modD_Kart_Graph.Graph_Preview(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modD_Aus_Backup.TermineText_Versuchen(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modXUtilities.WindowSavePosition(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
@@ -792,7 +795,7 @@ namespace vb6Convert
                         if (sublist[0].Equals("DevExpress.XtraTab.XtraTabControl"))
                         {
                             var deprecatedAttributeList = new List<String>();
-                            deprecatedAttributeList.Add("set_Ta(");
+                            deprecatedAttributeList.Add("set_Ta");
                             deprecatedAttributeList.Add("Tab");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
@@ -894,6 +897,7 @@ namespace vb6Convert
                                 deprecatedAttributeList.Add("FetchStyle");
                                 deprecatedAttributeList.Add("Locked");
                                 deprecatedAttributeList.Add("HeadingStyle");
+                                deprecatedAttributeList.Add("Alignment");
 
                                 foreach (var deprecatedAttribute in deprecatedAttributeList)
                                 {
@@ -1521,6 +1525,24 @@ namespace vb6Convert
                                     ))
                                 {
                                     line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("NumericUpDown"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("DownClick");
+                            deprecatedAttributeList.Add("UpClick");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
                                 }
                             }
                         }
