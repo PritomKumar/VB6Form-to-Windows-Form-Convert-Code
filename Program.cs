@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmUStatusSave";
+            var formName = "frmUtilAuswahl";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -260,8 +260,8 @@ namespace vb6Convert
 
             #region Prefix Change
 
-            designerContent = Regex.Replace(designerContent, @".Appearance = CodeArchitects.VB6Library.VB6AppearanceConstants.Flat;",
-                ".FlatStyle = FlatStyle.Flat;");
+            //designerContent = Regex.Replace(designerContent, @".Appearance = CodeArchitects.VB6Library.VB6AppearanceConstants.Flat;",
+            //    ".FlatStyle = FlatStyle.Flat;");
             designerContent = Regex.Replace(designerContent, @"QueryUnload += new CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler",
                 @"FormClosing += new FormClosingEventHandler");
             designerContent = Regex.Replace(designerContent, @"CodeArchitects.VB6Library.Events.VB6QueryUnloadEventHandler", @"FormClosingEventHandler");
@@ -1463,7 +1463,24 @@ namespace vb6Convert
 
                                 )
                                 {
-                                    allTODO_ProblemList.Add(line);
+                                    allTODO_ProblemListDesignerFile.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("TextBox"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Appearance");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemListDesignerFile.Add(line);
                                 }
                             }
                         }
@@ -1477,6 +1494,31 @@ namespace vb6Convert
                             {
                                 var changeAttribute = sublist[1] + "." + deprecatedAttribute;
                                 var changedValue = sublist[1] + "." + "TextChanged";
+                                var cautionValue = sublist[1] + "." + "HeightChange";
+                                if ((line.Contains(changeAttribute)
+                                     && !line.Contains(@"//")
+                                     && !line.Contains(changedValue)
+                                     && !line.Contains(cautionValue)
+
+                                    ))
+                                {
+                                    line = line.Replace(changeAttribute, changedValue);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("CheckBox")
+                        || sublist[0].Equals("Label")
+                        || sublist[0].Equals("Button")
+                        )
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("Appearance = CodeArchitects.VB6Library.VB6AppearanceConstants.Flat;");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var changeAttribute = sublist[1] + "." + deprecatedAttribute;
+                                var changedValue = sublist[1] + "." + "FlatStyle = FlatStyle.Flat;";
                                 var cautionValue = sublist[1] + "." + "HeightChange";
                                 if ((line.Contains(changeAttribute)
                                      && !line.Contains(@"//")
