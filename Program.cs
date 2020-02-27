@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmUtilAuswahl";
+            var formName = "frmXDbWartung";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -776,6 +776,24 @@ namespace vb6Convert
                         {
                             var deprecatedAttributeList = new List<String>();
                             deprecatedAttributeList.Add("BackStyle");
+
+                            foreach (var deprecatedAttribute in deprecatedAttributeList)
+                            {
+                                var todoChange = sublist[1] + "." + deprecatedAttribute;
+                                if ((line.Contains(todoChange) && !line.Contains(@"//"))
+
+                                )
+                                {
+                                    allTODO_ProblemList.Add(line);
+                                }
+                            }
+                        }
+
+                        if (sublist[0].Equals("DevExpress.XtraTab.XtraTabControl"))
+                        {
+                            var deprecatedAttributeList = new List<String>();
+                            deprecatedAttributeList.Add("set_Ta(");
+                            deprecatedAttributeList.Add("Tab");
 
                             foreach (var deprecatedAttribute in deprecatedAttributeList)
                             {
