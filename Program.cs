@@ -45,7 +45,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminPatientEcho";
+            var formName = "frmTerminSuche";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -511,7 +511,7 @@ namespace vb6Convert
                         || (line.Contains(@"modD_Kart_Graph.Graph_Preview(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modD_Aus_Backup.TermineText_Versuchen(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXUtilities.WindowSavePosition(") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@"modXUtilities.IsFormLoaded(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
