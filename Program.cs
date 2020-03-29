@@ -26,7 +26,9 @@ namespace vb6Convert
         {
 
             //var basePath = "F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\";
-            var basePath = "F:\\Termin Plus Project\\TerminPlus\\TerminPlus.Net\\TerminPlus\\";
+           
+           // var basePath = "F:\\Termin Plus Project\\TerminPlus\\TerminPlus.Net\\TerminPlus\\";
+            var basePath = "F:\\Therapie Plus Project\\TherapiePlusNewWorking\\TherapiePlus.Net\\TherapiePlus\\UI\\";
             var desingnerExtention = ".Designer.cs";
             var csExtension = ".cs";
 
@@ -45,7 +47,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTerminSuche";
+            var formName = "frmSerie";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -79,7 +81,6 @@ namespace vb6Convert
                         || line.Contains(@".OLEDropMode = ")
                         || line.Contains(@".ParentForm = this;")
                         || line.Contains(@".Name6 = ")
-                        || line.Contains(@".Name = ")
                         || line.Contains(@".Value2 = ")
                         || line.Contains(@".HelpContextID = "))
                         && !line.Contains(@"//"))
@@ -512,11 +513,10 @@ namespace vb6Convert
                         || (line.Contains(@"modD_Aus_Backup.TermineText_Versuchen(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXUtilities.WindowSavePosition(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@"modXUtilities.IsFormLoaded(") && !checkComment.StartsWith(@"//"))
+                        || (line.Contains(@".mod_Serie_E.SerieFrmSave(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
                         || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@".AddItem(") && !checkComment.StartsWith(@"//"))
-                        || (line.Contains(@"mod_Language.SetCurrentLanguage(this);") && !checkComment.StartsWith(@"//"))
 
                     )
                     {
@@ -925,11 +925,13 @@ namespace vb6Convert
                                     var changeAttribute = sublist[1] + "." + deprecatedAttribute;
                                     var changedValue = sublist[1] + "." + "SelectedValue";
                                     var cautionValue = sublist[1] + "." + "Value2";
+                                    var cautionValue2 = sublist[1] + "." + "ValueMember";
                                     var commentCheck = line.TrimStart();
                                     if ((line.Contains(changeAttribute)
                                          && !commentCheck.StartsWith(@"//")
                                          && !line.Contains(changedValue)
                                          && !line.Contains(cautionValue)
+                                         && !line.Contains(cautionValue2)
 
                                         ))
                                     {
@@ -1136,11 +1138,82 @@ namespace vb6Convert
                     {
                         //line = line.Replace( @"", @"");
                     }
-                    if (line.Contains(@""))
+                    if (line.Contains(@"VB6Helpers.ClearError();"))
                     {
-                        //line = line.Replace( @"", @"");
+                        line = line.Replace(@"VB6Helpers.ClearError();", @"");
                     }
 
+                    if (line.Contains(@"VB6Helpers.DoEvents()"))
+                    {
+                        line = line.Replace(@"VB6Helpers.DoEvents()", @"Application.DoEvents()");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.CDbl"))
+                    {
+                        line = line.Replace(@"VB6Helpers.CDbl", @"Convert.ToInt32");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.FromOleColor(VB6Helpers.RGB"))
+                    {
+                        line = line.Replace(@"VB6Helpers.FromOleColor(VB6Helpers.RGB", @"(Color.FromArgb");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.Unload(this);"))
+                    {
+                        line = line.Replace(@"VB6Helpers.Unload(this);", @"this.Close();");
+                    }
+
+                    if (line.Contains(@"mod_Language.SetCurrentLanguage(this)"))
+                    {
+                        line = line.Replace(@"mod_Language.SetCurrentLanguage(this);", @"ControlHelper.LocalizeForm(this);");
+                    }
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+
+
+                    //if (line.Contains(@"[]") && line.Contains(@"("))
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
+
+                    //if (line.Contains(@"[]") && line.Contains(@"("))
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
+
+                    //if (line.Contains(@"[]") && line.Contains(@"("))
+                    //{
+                    //    line = Regex.Replace(line, @"(", @"{");                      
+                    //}
 
                     //if (line.Contains(@"[]") && line.Contains(@"("))
                     //{
