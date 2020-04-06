@@ -47,7 +47,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmSerie";
+            var formName = "frmVerordnungMsgBox";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -1124,16 +1124,17 @@ namespace vb6Convert
 
                     }
 
-
                     if (line.Contains(@".FetchRowStyle") && !line.Contains(@".FetchRowStyles"))
                     {
                         line = line.Replace(@".FetchRowStyle", @".FetchRowStyles");
                     }
+
                     if (line.Contains(@"Cancel = (short)(true ? -1 : 0);"))
                     {
                         line = line.Replace(@"Cancel = (short)(true ? -1 : 0);",
                             @"e.Cancel = (true ? true : false);");
                     }
+
                     if (line.Contains(@""))
                     {
                         //line = line.Replace( @"", @"");
@@ -1151,6 +1152,31 @@ namespace vb6Convert
                     if (line.Contains(@"VB6Helpers.CDbl"))
                     {
                         line = line.Replace(@"VB6Helpers.CDbl", @"Convert.ToInt32");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.CBool"))
+                    {
+                        line = line.Replace(@"VB6Helpers.CBool", @"Convert.ToBoolean");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.CInt"))
+                    {
+                        line = line.Replace(@"VB6Helpers.CInt", @"Convert.ToInt32");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.CShort"))
+                    {
+                        line = line.Replace(@"VB6Helpers.CShort", @"Convert.ToInt16");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.Beep();"))
+                    {
+                        line = line.Replace(@"VB6Helpers.Beep();", @"");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.DoubleToDate"))
+                    {
+                        line = line.Replace(@"VB6Helpers.DoubleToDate", @"DateTime.FromOADate");
                     }
 
                     if (line.Contains(@"VB6Helpers.FromOleColor(VB6Helpers.RGB"))
@@ -1580,6 +1606,7 @@ namespace vb6Convert
                             }
                         }
 
+
                         if (sublist[0].Equals("Label"))
                         {
                             var deprecatedAttributeList = new List<String>();
@@ -1623,6 +1650,7 @@ namespace vb6Convert
                         if (sublist[0].Equals("CheckBox")
                         || sublist[0].Equals("Label")
                         || sublist[0].Equals("Button")
+                        || sublist[0].Equals("RadioButton")
                         )
                         {
                             var deprecatedAttributeList = new List<String>();
