@@ -47,7 +47,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmVerordnungMsgBox";
+            var formName = "frmTaxpunktRevi";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -1169,6 +1169,16 @@ namespace vb6Convert
                         line = line.Replace(@"VB6Helpers.CShort", @"Convert.ToInt16");
                     }
 
+                    if (line.Contains(@"VB6Helpers.CDate"))
+                    {
+                        line = line.Replace(@"VB6Helpers.CDate", @"Convert.ToDateTime");
+                    }
+
+                    if (line.Contains(@"VB6Helpers.EmptyDate"))
+                    {
+                        line = line.Replace(@"VB6Helpers.EmptyDate", @"ControlHelper.EmptyDate");
+                    }
+
                     if (line.Contains(@"VB6Helpers.Beep();"))
                     {
                         line = line.Replace(@"VB6Helpers.Beep();", @"");
@@ -1193,6 +1203,27 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"mod_Language.SetCurrentLanguage(this);", @"ControlHelper.LocalizeForm(this);");
                     }
+
+                    if (line.Contains(@"mod_Language.GetLanguageText"))
+                    {
+                        line = line.Replace(@"mod_Language.GetLanguageText", @"localizationManager.GetLanguageText");
+                    }
+
+
+                    if (line.Contains(@"modXFiles.FileExists"))
+                    {
+                        line = line.Replace(@"modXFiles.FileExists", @"File.Exists");
+                    }
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
 
                     //if (line.Contains(@""))
                     //{
@@ -1354,13 +1385,11 @@ namespace vb6Convert
                     {
                         line = line.Replace(@"KeyCode == (int) VBRUN.KeyCodeConstants.vbKeyEscape",
                             @"e.KeyCode == Keys.Escape");
-                        //Console.WriteLine("LALALALA");
                     }
 
                     if (line.Contains(@"KeyAscii == (int) VBRUN.KeyCodeConstants.vbKeyEscape"))
                     {
                         line = line.Replace(@"KeyAscii == (int) VBRUN.KeyCodeConstants.vbKeyEscape", @"e.KeyChar == (char)Keys.Escape");
-                        //Console.WriteLine("LALALALA");
                     }
                     if (line.Contains(@"KeyAscii == (int)VBRUN.KeyCodeConstants.vbKeyEscape"))
                     {

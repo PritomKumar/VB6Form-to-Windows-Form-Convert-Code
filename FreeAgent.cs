@@ -13,7 +13,7 @@ namespace vb6Convert
         public void Work()
         {
 
-            var basePath = "F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\";
+            var basePath = "F:\\Therapie Plus Project\\TherapiePlusNewWorking\\TherapiePlus.Net\\TherapiePlus\\UI\\";
             var desingnerExtention = ".Designer.cs";
             var csExtension = ".cs";
 
@@ -26,20 +26,18 @@ namespace vb6Convert
 
             //ReplaceInFile("F:\\C# Tutorial Practice\\TutorialApplication\\Program.cs");    
             //ReplaceInFile("F:\\Therapie Plus Project\\TherapiePlus.Net\\TherapiePlus\\UI\\frmRgEinzahlungBuchen.Designer.cs");
-            
+
             var FILE_PATH =
-                @"F:\Therapie Plus Project\TherapiePlusWorking Prime\TherapiePlus.Net\TherapiePlus.Core\Entities\Common\Constants.cs";
+                @"F:\Therapie Plus Project\TherapiePlusNewWorking\TherapiePlus.Net\TherapiePlus\UI\frmSTBehand.cs";
 
 
-
-            
             FixInFile(FILE_PATH);
 
         }
 
-       
 
-        public  void FixInFile(string filePath)
+
+        public void FixInFile(string filePath)
         {
 
             csContent = string.Empty;
@@ -57,14 +55,44 @@ namespace vb6Convert
                         //line = line + @"//" ;
 
                     }
-                    if ((
-                            line.StartsWith(@"//") && line.Contains(@"clause.")
-                        ))
+                    if (!line.StartsWith(@"//") && line.Contains(@"frmWarten.DefInstance.lbl"))
                     {
                         //line = line.TrimStart();
-                        line = "";
+                        line = "\n//TODO:Label\n" + "//" + line;
 
                     }
+
+                    //if (!line.StartsWith(@"//") && line.Contains(@"VB6Helpers.Unload(frmDruckSuche.DefInstance);"))
+                    //{
+                    //    line = line.Replace(@"VB6Helpers.Unload(frmDruckSuche.DefInstance);", @"");
+
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
+                    //if (line.Contains(@""))
+                    //{
+                    //    line = line.Replace(@"", @"");
+                    //}
+
                     //if (line.Contains(@"[]") && line.Contains(@"("))
                     //{
                     //    line = Regex.Replace(line, @"(", @"{");                      
@@ -79,7 +107,7 @@ namespace vb6Convert
                 reader.Close();
             }
 
-           
+
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
             csContent = Regex.Replace(csContent, @"", @"");
