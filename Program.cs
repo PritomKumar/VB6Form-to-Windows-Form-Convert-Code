@@ -47,7 +47,7 @@ namespace vb6Convert
 
 
 
-            var formName = "frmTaxpunktRevi";
+            var formName = "frmPLZPick";
 
             var desingerFilePath = basePath + formName + desingnerExtention;
             var csFilePath = basePath + formName + csExtension; ;
@@ -269,7 +269,7 @@ namespace vb6Convert
             designerContent = Regex.Replace(designerContent, "CodeArchitects.VB6Library.VB6Form", "Form");
             designerContent = Regex.Replace(designerContent, @".Change += new CodeArchitects.VB6Library.Events.VB6EventHandler",
                 @".TextChanged += new System.EventHandler");
-            designerContent = Regex.Replace(designerContent, ".Caption", ".Text");
+           // designerContent = Regex.Replace(designerContent, ".Caption", ".Text");
             designerContent = Regex.Replace(designerContent, @".BorderStyle = CodeArchitects.VB6Library.VBRUN.FormBorderStyleConstants.vbFixedDouble;",
                 @".FormBorderStyle = FormBorderStyle.Fixed3D;");
             designerContent = Regex.Replace(designerContent, ".MaxButton", ".MaximizeBox");
@@ -1404,7 +1404,7 @@ namespace vb6Convert
                 reader.Close();
             }
 
-            csContent = Regex.Replace(csContent, @".Caption", @".Text");
+            //csContent = Regex.Replace(csContent, @".Caption", @".Text");
             csContent = Regex.Replace(csContent, "DefInstance.Show(1);", @"DefInstance.ShowDialog();");
             csContent = Regex.Replace(csContent, @".SetFocus", @".Focus");
             csContent = Regex.Replace(csContent, @"Value == VBRUN.CheckBoxConstants.vbUnchecked", @"Checked == false");

@@ -8,19 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\pritom.kumar\\.nuget\\packages\\": {}
+    "C:\\Users\\Asus\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
+      "projectUniqueName": "G:\\SELISE\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
       "projectName": "vb6Convert",
-      "projectPath": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
-      "packagesPath": "C:\\Users\\pritom.kumar\\.nuget\\packages\\",
-      "outputPath": "F:\\Personal\\C# Projects\\VB6Form To Windows Form\\obj\\",
+      "projectPath": "G:\\SELISE\\Personal\\C# Projects\\VB6Form To Windows Form\\vb6Convert.csproj",
+      "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
+      "outputPath": "G:\\SELISE\\Personal\\C# Projects\\VB6Form To Windows Form\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pritom.kumar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,7 +28,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://nuget.grapecity.com/nuget": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -59,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
